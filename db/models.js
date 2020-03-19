@@ -16,10 +16,10 @@ let UserModel = mongoose.model('user', userSchema)
 let chatSchema = mongoose.Schema({
   from: {type: String, required: true},
   to: {type: String, required: true},
-  chat_id: {type: String, required: true},
+  belongTo: {type: String, required: true},
   content: {type: String, required: true},
-  read: {type: Boolean, default: false},
-  create_time:{type: Number}
+  isRead: {type: Boolean, default: false},
+  date:{type: Number}
 })
 
 const ChatModel = mongoose.model('chat', chatSchema)
