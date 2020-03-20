@@ -74,6 +74,8 @@ router.post('/update', (req, res) => {
       res.clearCookie('userid')
       return res.send({status: 0, message: '用户信息无效, 请重新登陆'})
     }
+    
+    // 根据 oldUser 和 req.body 拼出 newUser
     const {_id, username, type} = oldUser
     const user = Object.assign({_id, username, type}, req.body)
     res.send({status: 1, data: user})
@@ -94,7 +96,6 @@ router.get('/getinfo', (req, res) => {
     res.send({status: 1, data: user})
   })
 })
-
 
 // 获取列表的路由
 router.get('/getlist', (req, res) => {
@@ -123,7 +124,7 @@ router.get('/getchatlist', (req, res) => {
       if (err) {
         return res.send({status: 0, mesage: '发生未知错误7'})
       }
-      res.send({status: 1, data: {user: userFilter, chatList}})
+      res.send({status: 1, data: {users: userFilter, chatList}})
     })
   })
 })
@@ -132,9 +133,6 @@ router.get('/getchatlist', (req, res) => {
 router.post('/readmessage', (req, res) => {
   const {from} = req.body,
         to = req.cookies.userid
-  ChatModel.find({from, to, isRead: false}, (err, data) => {
-    console.log(data)
-  })
   ChatModel.update({from, to, isRead: false}, {isRead: true}, {multi: true}, (err, doc) => {
     if (err) {
       return res.send({status: 0, message: '发生未知错误8'})
